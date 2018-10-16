@@ -32,13 +32,8 @@
             this.tsmiOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSave = new System.Windows.Forms.ToolStripMenuItem();
             this.lbGongfa = new System.Windows.Forms.ListBox();
-            this.pGongfa = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tbName = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.tbDescription = new System.Windows.Forms.TextBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.menu.SuspendLayout();
-            this.pGongfa.SuspendLayout();
             this.SuspendLayout();
             // 
             // menu
@@ -74,67 +69,29 @@
             this.lbGongfa.TabIndex = 3;
             this.lbGongfa.SelectedIndexChanged += new System.EventHandler(this.lbGongfa_SelectedIndexChanged);
             // 
-            // pGongfa
+            // flowLayoutPanel1
             // 
-            this.pGongfa.Controls.Add(this.tbDescription);
-            this.pGongfa.Controls.Add(this.label2);
-            this.pGongfa.Controls.Add(this.tbName);
-            this.pGongfa.Controls.Add(this.label1);
-            this.pGongfa.Location = new System.Drawing.Point(181, 28);
-            this.pGongfa.Name = "pGongfa";
-            this.pGongfa.Size = new System.Drawing.Size(607, 412);
-            this.pGongfa.TabIndex = 4;
-            this.pGongfa.Visible = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(5, 4);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "名称";
-            // 
-            // tbName
-            // 
-            this.tbName.Location = new System.Drawing.Point(40, 1);
-            this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(161, 21);
-            this.tbName.TabIndex = 1;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(5, 32);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 12);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "描述";
-            // 
-            // tbDescription
-            // 
-            this.tbDescription.Location = new System.Drawing.Point(40, 29);
-            this.tbDescription.Multiline = true;
-            this.tbDescription.Name = "tbDescription";
-            this.tbDescription.Size = new System.Drawing.Size(161, 76);
-            this.tbDescription.TabIndex = 3;
+            this.flowLayoutPanel1.AutoScroll = true;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(180, 28);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(608, 412);
+            this.flowLayoutPanel1.TabIndex = 4;
             // 
             // GongFaEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.pGongfa);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.lbGongfa);
             this.Controls.Add(this.menu);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MainMenuStrip = this.menu;
             this.Name = "GongFaEdit";
             this.Text = "功法编辑器";
+            this.Load += new System.EventHandler(this.GongFaEdit_Load);
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
-            this.pGongfa.ResumeLayout(false);
-            this.pGongfa.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -145,11 +102,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiOpen;
         private System.Windows.Forms.ToolStripMenuItem tsmiSave;
         private System.Windows.Forms.ListBox lbGongfa;
-        private System.Windows.Forms.Panel pGongfa;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox tbName;
-        private System.Windows.Forms.TextBox tbDescription;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }
 

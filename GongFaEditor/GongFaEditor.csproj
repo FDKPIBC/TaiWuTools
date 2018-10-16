@@ -46,6 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Component\GTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Component\GTextBox.Designer.cs">
+      <DependentUpon>GTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Component\ITaiWuService.cs" />
     <Compile Include="GongFaEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -54,7 +61,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\GongFa.cs" />
+    <Compile Include="Utils\GongFaAttribute.cs" />
     <Compile Include="Utils\GongFaManager.cs" />
+    <Compile Include="Utils\LogManager.cs" />
+    <Compile Include="Utils\ObjectExtend.cs" />
+    <EmbeddedResource Include="Component\GTextBox.resx">
+      <DependentUpon>GTextBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GongFaEdit.resx">
       <DependentUpon>GongFaEdit.cs</DependentUpon>
     </EmbeddedResource>

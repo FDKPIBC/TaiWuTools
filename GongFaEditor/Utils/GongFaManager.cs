@@ -5,12 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace GongFaEditor.Utils
 {
     public class GongFaManager
     {
         public string BasePath = AppDomain.CurrentDomain.BaseDirectory;
+
+        public List<GongFa> GongFaList { get; set; }
 
         public Dictionary<int, Dictionary<int, string>> GongFaData { get; set; }
 
@@ -32,6 +36,7 @@ namespace GongFaEditor.Utils
         public GongFaManager()
         {
             GongFaData = new Dictionary<int, Dictionary<int, string>>();
+            GongFaList = new List<GongFa>(); 
             textColor = new Dictionary<int, Dictionary<int, string>>();
             arrCacheGongFaDate = new Dictionary<int, Dictionary<int, List<ArrCacheGongFaDateItem>>>();
             messageDate = new Dictionary<int, Dictionary<int, string>>();
@@ -92,6 +97,10 @@ namespace GongFaEditor.Utils
         {
             string path = string.Format("{0}\\Data\\{1}.txt", this.BasePath, "GongFa_Date");
             LoadGongFaData(path, passDateIndex);
+            Stopwatch stopwatch = new Stopwatch();
+            //stopwatch.Start();
+            Parallel.ForEach(GongFaData, (gongfa) => GongFaList.Add(GetGongFa(gongfa.Key, gongfa.Value)));
+            //stopwatch.Stop();
         }
 
         /// <summary>
@@ -101,8 +110,14 @@ namespace GongFaEditor.Utils
         /// <param name="passDateIndex"></param>
         public void LoadGongFaData(string path, int passDateIndex = -1)
         {
+            GongFaData = GetData(path,passDateIndex);
             //var dateList = new Dictionary<int, Dictionary<int, string>>();
             //string path = string.Format("{0}\\{1}.txt", this.BasePath, "GongFa_Date");
+        }
+
+        private Dictionary<int, Dictionary<int, string>> GetData(string path, int passDateIndex = -1)
+        {
+            var result = new Dictionary<int, Dictionary<int, string>>();
             string text;
             if (File.Exists(path))
             {
@@ -111,7 +126,6 @@ namespace GongFaEditor.Utils
             else
             {
                 text = "";
-                //text = this.baseGameDate[dateName];
             }
             string[] array = text.Replace("\r", "").Split(new char[]
             {
@@ -145,65 +159,23 @@ namespace GongFaEditor.Utils
                             dictionary.Add(int.Parse(array2[j]), Regex.Unescape(array3[j]));
                         }
                     }
-                    lock (GongFaData)
+                    lock (result)
                     {
-                        GongFaData.Add(int.Parse(array3[0]), dictionary);
+                        result.Add(int.Parse(array3[0]), dictionary);
                     }
                 }
             }
+            return result;
         }
 
+        /// <summary>
+        /// 读取message信息
+        /// </summary>
+        /// <param name="passDateIndex"></param>
         public void LoadMessageData(int passDateIndex = -1)
         {
             string path = string.Format("{0}\\Data\\{1}.txt", this.BasePath, "Massage_Date");
-            string text;
-            if (File.Exists(path))
-            {
-                text = File.OpenText(path).ReadToEnd().Replace("\\r\\n","\r\n");
-            }
-            else
-            {
-                text = "";
-            }
-            string[] array = text.Replace("\r", "").Split(new char[]
-            {
-            "\n"[0]
-            });
-            string[] array2 = array[0].Split(new char[]
-            {
-            ','
-            });
-            for (int i = 0; i < array.Length; i++)
-            {
-                string[] array3 = array[i].Split(new char[]
-                {
-                ','
-                });
-                if (array3[0] != "#" && array3[0] != "")
-                {
-                    Dictionary<int, string> dictionary = new Dictionary<int, string>();
-                    for (int j = 0; j < array2.Length; j++)
-                    {
-                        if (array2[j] != "#" && array2[j] != "" && int.Parse(array2[j]) != passDateIndex)
-                        {
-                            if (array3[j].Contains("C_"))
-                            {
-                                for (int k = 0; k < this.textColorKeys.Count; k++)
-                                {
-                                    array3[j] = array3[j].Replace("C_" + this.textColorKeys[k], this.textColor[this.textColorKeys[k]][0]);
-                                }
-                                array3[j] = array3[j].Replace("C_D", "</color>");
-                            }
-                            dictionary.Add(int.Parse(array2[j]), Regex.Unescape(array3[j]));
-                        }
-                    }
-                    //8007 描述
-                    lock (messageDate)
-                    {
-                        messageDate.Add(int.Parse(array3[0]), dictionary);
-                    }
-                }
-            }
+            messageDate = GetData(path,passDateIndex);
         }
 
         public List<ArrCacheGongFaDateItem> GetGongFaDateArr(int key, int index)
@@ -239,6 +211,59 @@ namespace GongFaEditor.Utils
             }
             this.arrCacheGongFaDate[key][index] = list;
             return list;
+        }
+
+        /// <summary>
+        /// 转化数据对象为功法
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public GongFa GetGongFa(int index, Dictionary<int, string> value)
+        {
+            var gf = new GongFa();
+            var props = gf.GetType().GetProperties();
+            gf.Original = value;
+            gf.GongFaId = index;
+            foreach (var prop in props)
+            {
+                try
+                {
+                    var attr = (GongFaAttribute)Attribute.GetCustomAttribute(prop, typeof(GongFaAttribute), true);
+                    if (attr != null)
+                    {
+                        if (attr.Index == -1) continue;
+                        var data = value[attr.Index];
+                        prop.SetValue(gf, DataConvert(data, prop.PropertyType), null);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    continue;
+                }
+            }
+            return gf;
+        }
+
+        /// <summary>
+        /// 获取功法属性对象
+        /// </summary>
+        /// <param name="prop"></param>
+        /// <returns></returns>
+        public GongFaAttribute GetGongFaAttribute(PropertyInfo prop) => (GongFaAttribute)Attribute.GetCustomAttribute(prop, typeof(GongFaAttribute), true);
+
+        public object DataConvert(string data,Type type)
+        {
+            if (typeof(int) == type)
+            {
+                return int.Parse(data);
+            }
+            if (typeof(decimal) == type)
+            {
+                return decimal.Parse(data);
+            }
+            return data;
         }
 
         //0 名称
@@ -288,8 +313,8 @@ namespace GongFaEditor.Utils
         //51372
         //51373
 
-        //50092
-        //50093
+        //50092 力道发挥%
+        //50093 精妙发挥%
         //50094
         //50095
         //50096
