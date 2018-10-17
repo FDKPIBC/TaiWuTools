@@ -58,23 +58,26 @@
             this.tsmiSave.Name = "tsmiSave";
             this.tsmiSave.Size = new System.Drawing.Size(44, 21);
             this.tsmiSave.Text = "保存";
+            this.tsmiSave.Click += new System.EventHandler(this.tsmiSave_Click);
             // 
             // lbGongfa
             // 
+            this.lbGongfa.Dock = System.Windows.Forms.DockStyle.Left;
             this.lbGongfa.FormattingEnabled = true;
             this.lbGongfa.ItemHeight = 12;
-            this.lbGongfa.Location = new System.Drawing.Point(12, 28);
+            this.lbGongfa.Location = new System.Drawing.Point(0, 25);
             this.lbGongfa.Name = "lbGongfa";
-            this.lbGongfa.Size = new System.Drawing.Size(162, 412);
+            this.lbGongfa.Size = new System.Drawing.Size(174, 425);
             this.lbGongfa.TabIndex = 3;
             this.lbGongfa.SelectedIndexChanged += new System.EventHandler(this.lbGongfa_SelectedIndexChanged);
             // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.AutoScroll = true;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(180, 28);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(174, 25);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(608, 412);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(626, 425);
             this.flowLayoutPanel1.TabIndex = 4;
             // 
             // GongFaEdit

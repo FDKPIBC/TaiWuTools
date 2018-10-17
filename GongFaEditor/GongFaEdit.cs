@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,12 +32,15 @@ namespace GongFaEditor
             var list = new List<GTextBox>();
             Parallel.ForEach(gongfa.GetType().GetProperties(), (prop) =>
             {
-                var attr = gongFaManager.GetGongFaAttribute(prop);
+                var attr = GongFaManager.GetGongFaAttribute(prop);
                 if (attr != null)
                 {
-                    var gtb = new GTextBox(prop.GetValue(gongfa));
-                    gtb.Attribute = attr;
+                    var gtb = new GTextBox(prop, prop.GetValue(gongfa));
                     gtb.Init();
+                    gtb.ValueChanged += (sender,e)=> {
+                        prop.SetValue(gongfa, e.ChangedValue);
+                        gongfa.Original[attr.Index] = e.ChangedValue.ToString();
+                    };
                     list.Add(gtb);
                 }
             });
@@ -64,5 +68,16 @@ namespace GongFaEditor
         }
 
         private void GongFaEdit_Load(object sender, EventArgs e) => LoadGongFaList();
+
+        private void tsmiSave_Click(object sender, EventArgs e)
+        {
+            var outdir = Path.Combine(gongFaManager.BasePath, "output");
+            if (!Directory.Exists(outdir)) Directory.CreateDirectory(outdir);
+            gongFaManager.SaveAll(Path.Combine(outdir, "GongFa_Date.txt"));
+            if (MessageBox.Show("已保存,是否打开输出文件夹","",MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Process.Start(outdir);
+            }
+        }
     }
 }

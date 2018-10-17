@@ -8,7 +8,9 @@ namespace GongFaEditor.Utils
 {
     public static class ObjectExtend
     {
-        public static void Log(this Exception ex) => LogManager.WriteLog(ex);
+        public static void WriteLog(this Exception ex) => LogManager.WriteExceptionLog(ex);
+
+        public static void WriteLog(this string str) => LogManager.WriteLog(str);
 
         public static bool IsNullOrEmpty(this string str) => string.IsNullOrEmpty(str);
     }

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaiWuSaveEdit", "TaiWuSaveE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GongFaEditor", "GongFaEditor\GongFaEditor.csproj", "{435662C2-A520-4FBF-83AB-EEA8200B1268}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecordGenerator", "RecordGenerator\RecordGenerator.csproj", "{F9FECF40-C4B1-4A22-80AC-63F8659A842C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{435662C2-A520-4FBF-83AB-EEA8200B1268}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{435662C2-A520-4FBF-83AB-EEA8200B1268}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{435662C2-A520-4FBF-83AB-EEA8200B1268}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9FECF40-C4B1-4A22-80AC-63F8659A842C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9FECF40-C4B1-4A22-80AC-63F8659A842C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9FECF40-C4B1-4A22-80AC-63F8659A842C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9FECF40-C4B1-4A22-80AC-63F8659A842C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

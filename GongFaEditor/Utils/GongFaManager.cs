@@ -251,9 +251,9 @@ namespace GongFaEditor.Utils
         /// </summary>
         /// <param name="prop"></param>
         /// <returns></returns>
-        public GongFaAttribute GetGongFaAttribute(PropertyInfo prop) => (GongFaAttribute)Attribute.GetCustomAttribute(prop, typeof(GongFaAttribute), true);
+        public static GongFaAttribute GetGongFaAttribute(PropertyInfo prop) => (GongFaAttribute)Attribute.GetCustomAttribute(prop, typeof(GongFaAttribute), true);
 
-        public object DataConvert(string data,Type type)
+        public static object DataConvert(string data,Type type)
         {
             if (typeof(int) == type)
             {
@@ -266,59 +266,15 @@ namespace GongFaEditor.Utils
             return data;
         }
 
-        //0 名称
-        //2 颜色代码(20001 + ?)
-        //99 描述
-        //70-72 
-
-        //50041
-        //50042
-        //50043
-        //50044
-        //50045
-        //50046
-
-        //50032 外伤上限
-        //50033 内伤上限
-
-        //50022 守御效率
-        //50023 疗伤效率
-
-        //51110 驱毒效率
-        //51101 
-        //51102
-        //51103
-        //51104
-        //51105
-        //51106
-        //51107
-        //51108
-        //51109
-        //51111
-
-        //50081
-        //50082
-        //50083
-
-        //51367
-        //51368
-        //51369
-
-        //50084
-        //50085
-        //50086
-
-        //51370
-        //51371
-        //51372
-        //51373
-
-        //50092 力道发挥%
-        //50093 精妙发挥%
-        //50094
-        //50095
-        //50096
-        //50097
-        //50098
+        public void SaveAll(string outpath)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("#,0,2,61,62,63,64,66,67,68,69,70,71,72,73,99,103,104,1,6,7,3,15,16,4,5,701,702,703,704,705,999,710,711,901,902,903,904,905,906,907,908,909,910,921,922,923,924,95,96,501,502,503,504,14,8,9,31,38,39,40,10,11,12,13,101,21,22,23,24,25,26,27,28,29,30,601,602,603,611,612,613,614,615,604,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,32,33,34,35,36,81,82,83,84,85,86,50041,50042,50043,50044,50045,50046,50032,50033,50022,50023,51110,51101,51102,51103,51104,51105,51106,51107,51108,51109,51111,50081,50082,50083,51367,51368,51369,50084,50085,50086,51370,51371,51372,50071,50072,50073,50092,50093,50094,50095,50096,50097,50098,98,37");
+            foreach (var gongfa in GongFaList)
+            {
+                sb.AppendLine($"{gongfa.GongFaId},{string.Join(",",gongfa.Original.Values)}");
+            }
+            File.WriteAllText(outpath, sb.ToString());
+        }
     }
 }
