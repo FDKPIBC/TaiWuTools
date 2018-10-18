@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using GongFaEditor.Utils;
+using GongFaEditor.Core;
 using System.Reflection;
 
 namespace GongFaEditor.Component
@@ -50,7 +51,7 @@ namespace GongFaEditor.Component
             SizeF sizeD = g.MeasureString(Attribute.Description, font);
             SizeF sizeV = g.MeasureString(orginalValue.ToString(), font);
             textBox1.Location = new Point((int)sizeD.Width + 5,3);
-            textBox1.Width = (int)sizeV.Width + 15;
+            textBox1.Width = (int)sizeV.Width + 20;
             this.Width = (int)sizeD.Width + (int)sizeV.Width + 30;
         }
 

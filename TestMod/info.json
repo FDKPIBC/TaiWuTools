@@ -1,0 +1,8 @@
+﻿{
+  "Id": "TestMod",
+  "DisplayName": "TestMod",
+  "Author": "24IsSnake",
+  "Version": "1.0.0",
+  "AssemblyName": "TestMod.dll",
+  "EntryMethod": "TestMod.Main.Load"
+}

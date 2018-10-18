@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.Diagnostics;
 
-namespace GongFaEditor.Utils
+namespace GongFaEditor.Core
 {
     public class GongFaManager
     {
@@ -20,27 +20,17 @@ namespace GongFaEditor.Utils
 
         private Dictionary<int, Dictionary<int, string>> textColor;
 
-        private Dictionary<int, Dictionary<int, List<ArrCacheGongFaDateItem>>> arrCacheGongFaDate;
-
-        public Dictionary<int, Dictionary<int, string>> messageDate;
+        public Dictionary<int, Dictionary<int, string>> MessageDate { get; set; }
 
         private List<int> textColorKeys;
-        
-        public struct ArrCacheGongFaDateItem
-        {
-            public int i0;
-            
-            public float f1;
-        }
 
         public GongFaManager()
         {
             GongFaData = new Dictionary<int, Dictionary<int, string>>();
-            GongFaList = new List<GongFa>(); 
-            textColor = new Dictionary<int, Dictionary<int, string>>();
-            arrCacheGongFaDate = new Dictionary<int, Dictionary<int, List<ArrCacheGongFaDateItem>>>();
-            messageDate = new Dictionary<int, Dictionary<int, string>>();
+            GongFaList = new List<GongFa>();
+            MessageDate = new Dictionary<int, Dictionary<int, string>>();
             textColorKeys = new List<int>();
+            textColor = new Dictionary<int, Dictionary<int, string>>();
             GetTextColor();
         }
 
@@ -97,10 +87,6 @@ namespace GongFaEditor.Utils
         {
             string path = string.Format("{0}\\Data\\{1}.txt", this.BasePath, "GongFa_Date");
             LoadGongFaData(path, passDateIndex);
-            Stopwatch stopwatch = new Stopwatch();
-            //stopwatch.Start();
-            Parallel.ForEach(GongFaData, (gongfa) => GongFaList.Add(GetGongFa(gongfa.Key, gongfa.Value)));
-            //stopwatch.Stop();
         }
 
         /// <summary>
@@ -111,8 +97,8 @@ namespace GongFaEditor.Utils
         public void LoadGongFaData(string path, int passDateIndex = -1)
         {
             GongFaData = GetData(path,passDateIndex);
-            //var dateList = new Dictionary<int, Dictionary<int, string>>();
-            //string path = string.Format("{0}\\{1}.txt", this.BasePath, "GongFa_Date");
+            Parallel.ForEach(GongFaData, (gongfa) => GongFaList.Add(GetGongFa(gongfa.Key, gongfa.Value)));
+            GongFaList = GongFaList.OrderBy(t => t.GongFaId).ToList();
         }
 
         private Dictionary<int, Dictionary<int, string>> GetData(string path, int passDateIndex = -1)
@@ -175,44 +161,9 @@ namespace GongFaEditor.Utils
         public void LoadMessageData(int passDateIndex = -1)
         {
             string path = string.Format("{0}\\Data\\{1}.txt", this.BasePath, "Massage_Date");
-            messageDate = GetData(path,passDateIndex);
+            MessageDate = GetData(path,passDateIndex);
         }
-
-        public List<ArrCacheGongFaDateItem> GetGongFaDateArr(int key, int index)
-        {
-            if (this.arrCacheGongFaDate.ContainsKey(key))
-            {
-                Dictionary<int, List<ArrCacheGongFaDateItem>> dictionary = this.arrCacheGongFaDate[key];
-                if (dictionary.ContainsKey(index))
-                {
-                    return dictionary[index];
-                }
-            }
-            string[] array = GongFaData[key][index].Split(new char[]
-            {
-            '|'
-            });
-            List<ArrCacheGongFaDateItem> list = new List<ArrCacheGongFaDateItem>();
-            for (int i = 0; i < array.Length; i++)
-            {
-                string[] array2 = array[i].Split(new char[]
-                {
-                '&'
-                });
-                list.Add(new ArrCacheGongFaDateItem
-                {
-                    i0 = int.Parse(array2[0]),
-                    f1 = float.Parse(array2[1])
-                });
-            }
-            if (!this.arrCacheGongFaDate.ContainsKey(key))
-            {
-                this.arrCacheGongFaDate[key] = new Dictionary<int, List<ArrCacheGongFaDateItem>>();
-            }
-            this.arrCacheGongFaDate[key][index] = list;
-            return list;
-        }
-
+        
         /// <summary>
         /// 转化数据对象为功法
         /// </summary>
@@ -253,6 +204,12 @@ namespace GongFaEditor.Utils
         /// <returns></returns>
         public static GongFaAttribute GetGongFaAttribute(PropertyInfo prop) => (GongFaAttribute)Attribute.GetCustomAttribute(prop, typeof(GongFaAttribute), true);
 
+        /// <summary>
+        /// 数据转换
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static object DataConvert(string data,Type type)
         {
             if (typeof(int) == type)
@@ -266,6 +223,10 @@ namespace GongFaEditor.Utils
             return data;
         }
 
+        /// <summary>
+        /// 保存当前修改后的所有数据
+        /// </summary>
+        /// <param name="outpath"></param>
         public void SaveAll(string outpath)
         {
             StringBuilder sb = new StringBuilder();

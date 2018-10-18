@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GongFaEditor.Utils
+namespace GongFaEditor.Core
 {
     public class GongFa
     {
@@ -40,7 +40,7 @@ namespace GongFaEditor.Utils
         /// <summary>
         /// 类型1
         /// </summary>
-        [GongFa(Index = 61, Description = "类型1")]
+        [GongFa(Index = 61, Description = "类型1",Tips = "100+N 内功|身法|绝技|拳掌|指法|腿法|暗器|剑法|刀法|长兵|奇门|软兵|御射|乐器")]
         public int GFType1 { get; set; }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace GongFaEditor.Utils
         /// <summary>
         /// 说明
         /// </summary>
-        [GongFa(Index = 99, Description = "说明")]
+        [GongFa(Index = 99, Description = "说明",Skip = true)]
         public string Description { get; set; }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace GongFaEditor.Utils
         /// <summary>
         /// 门派
         /// </summary>
-        [GongFa(Index = 3, Description = "门派")]
+        [GongFa(Index = 3, Description = "门派",Tips = "100+1 少林|峨眉|百花|武当|元山|狮相|然山|璇女|铸剑|空桑|金刚|五仙|界青门|伏龙|血吼")]
         public int Sect { get; set; }
 
         /// <summary>

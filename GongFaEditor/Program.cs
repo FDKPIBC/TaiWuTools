@@ -28,7 +28,7 @@ namespace GongFaEditor
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             var ex = e.ExceptionObject as Exception;
-            if (ex != null) ex.WriteLog();
+            if (ex != null) ex.WriteLog(); 
         }
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e) => e.Exception.WriteLog();

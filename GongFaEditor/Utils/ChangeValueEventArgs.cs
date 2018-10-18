@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GongFaEditor.Core;
 
 namespace GongFaEditor.Utils
 {

@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GongFaEditor.Core;
 using System.Windows.Forms;
 
 namespace GongFaEditor
@@ -26,6 +27,10 @@ namespace GongFaEditor
             gongFaManager.LoadMessageData();
         }
 
+        /// <summary>
+        /// 加载功法数据
+        /// </summary>
+        /// <param name="gongfaIndex"></param>
         public void ShowGongFaData(int gongfaIndex)
         {
             var gongfa = gongFaManager.GongFaList.FirstOrDefault(t => t.GongFaId == gongfaIndex);
@@ -35,9 +40,11 @@ namespace GongFaEditor
                 var attr = GongFaManager.GetGongFaAttribute(prop);
                 if (attr != null)
                 {
+                    if (attr.Skip) return;
                     var gtb = new GTextBox(prop, prop.GetValue(gongfa));
                     gtb.Init();
-                    gtb.ValueChanged += (sender,e)=> {
+                    gtb.ValueChanged += (sender, e) =>
+                    {
                         prop.SetValue(gongfa, e.ChangedValue);
                         gongfa.Original[attr.Index] = e.ChangedValue.ToString();
                     };
@@ -47,16 +54,17 @@ namespace GongFaEditor
             flowLayoutPanel1.Controls.AddRange(list.ToArray());
         }
 
+        /// <summary>
+        /// 功法列表绑定
+        /// </summary>
         public void LoadGongFaList()
         {
             lbGongfa.ValueMember = "Key";
             lbGongfa.DisplayMember = "Value";
-            Stopwatch stopWatch = new Stopwatch();
-            Parallel.ForEach(gongFaManager.GongFaData, (GongFa) => {
-                lbGongfa.Invoke(new Action(()=> {
-                    lbGongfa.Items.Add(new KeyValuePair<int, string>(GongFa.Key, GongFa.Value[0]));
-                }));
-            });
+            foreach (var GongFa in gongFaManager.GongFaData)
+            {
+                lbGongfa.Items.Add(new KeyValuePair<int, string>(GongFa.Key, GongFa.Value[0]));
+            }
         }
 
         private void lbGongfa_SelectedIndexChanged(object sender, EventArgs e)
